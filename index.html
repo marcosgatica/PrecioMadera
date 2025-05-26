@@ -1,97 +1,247 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Precio de Madera</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-image: url(madera2.jpg);
-      background-size: cover;
-    }
-    h1 {
-      text-align: center;
-      color: #ffffff;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #ee6047b6;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #resultado {
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Precio de Madera</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url(madera2.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Esto asegura que la imagen de fondo no se desplace con el scroll */
+            color: #ffffff; /* Color de texto general para mejor contraste */
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+        .container {
+            max-width: 900px; /* Aumentamos el ancho para acomodar los campos horizontales */
+            margin: 0 auto;
+            background-color: #ee6047b6;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .calculation-row {
+            display: flex; /* Usamos flexbox para organizar los elementos en horizontal */
+            flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea si no hay espacio */
+            gap: 15px; /* Espacio entre los elementos */
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #c9513e9a; /* Fondo más claro para cada fila de cálculo */
+            border-radius: 5px;
+            align-items: flex-end; /* Alinea los elementos al final para que los inputs queden en la misma línea base */
+        }
+        .form-group {
+            flex: 1; /* Permite que los grupos de formulario crezcan y ocupen el espacio disponible */
+            min-width: 120px; /* Ancho mínimo para cada campo, ajusta si es necesario */
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+            color: #333; /* Color de texto para los inputs */
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #add-row-btn {
+            background-color: #007bff; /* Color para el botón de agregar fila */
+            margin-bottom: 20px;
+        }
+        #add-row-btn:hover {
+            background-color: #0056b3;
+        }
+        .delete-row-btn {
+            background-color: #dc3545; /* Color para el botón de eliminar fila */
+            width: auto; /* Para que el botón no ocupe todo el ancho */
+            padding: 8px 12px;
+            font-size: 14px;
+            margin-top: 0; /* Reiniciar el margen superior para que se alinee */
+            align-self: center; /* Alinea el botón en el centro verticalmente dentro del flex container */
+        }
+        .delete-row-btn:hover {
+            background-color: #c82333;
+        }
+        #results-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ccc;
+        }
+        .individual-result {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        #total-sum {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #ffffff;
+            background-color: #28a745; /* Fondo para el total */
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Calculadora de Precio de Madera</h1>
-    <label for="cantidad">Cantidad requerida:</label>
-    <input type="number" id="cantidad" min="0" step="1" required>
+    <div class="container">
+        <h1>Calculadora de Precio de Madera</h1>
 
-    <label for="grueso">Grueso (pulgadas):</label>
-    <input type="number" id="grueso" min="0" step="1" required>
+        <div id="calculation-rows-container">
+            <div class="calculation-row" id="row-0">
+                <div class="form-group">
+                    <label for="cantidad-0">Cantidad:</label>
+                    <input type="number" id="cantidad-0" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="grueso-0">Grueso (pulgadas):</label>
+                    <input type="number" id="grueso-0" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="ancho-0">Ancho (pulgadas):</label>
+                    <input type="number" id="ancho-0" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="largo-0">Largo (Pies):</label>
+                    <input type="number" id="largo-0" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="precio-pie-0">Precio/pie (Q):</label>
+                    <input type="number" id="precio-pie-0" min="0" step="0.01" value="1">
+                </div>
+                <button class="delete-row-btn" onclick="deleteRow(0)">Eliminar</button>
+            </div>
+        </div>
 
-    <label for="ancho">Ancho (pulgadas):</label>
-    <input type="number" id="ancho" min="0" step="1" required>
+        <button id="add-row-btn" onclick="addRow()">Agregar nueva línea</button>
+        <button onclick="calculateAllPrices()">Calcular Todo</button>
 
-    <label for="largo">Largo (Pies):</label>
-    <input type="number" id="largo" min="0" step="1" required>
+        <div id="results-container">
+            </div>
 
-    <label for="precio-pie">Precio por pie (Q):</label>
-    <input type="number" id="precio-pie" min="0" step="1" required>
+        <div id="total-sum"></div>
+    </div>
 
-    <button onclick="calcularPrecio()">Calcular Precio</button>
-    <div id="resultado"></div>
-  </div>
+    <script>
+        let rowCount = 1; // Contador para el número de filas de cálculo
 
-  <script>
-    function CalcularPrecio(Cant, G, A, L, PrecioPie) {
-      var Precio = (((G * A * L) / 12) * PrecioPie) * Cant;
-      return Precio;
-    }
+        // Función para calcular el precio de una sola pieza de madera
+        function calculatePiecePrice(cantidad, grueso, ancho, largo, precioPie) {
+            if (grueso === 0 || ancho === 0 || largo === 0 || precioPie === 0 || cantidad === 0) {
+                return 0; // Evita divisiones por cero o cálculos sin sentido
+            }
+            // La fórmula original: (((G * A * L) / 12) * PrecioPie) * Cant;
+            var precio = (((grueso * ancho * largo) / 12) * precioPie) * cantidad;
+            return precio;
+        }
 
-    function calcularPrecio() {
-      var cantidad = parseFloat(document.getElementById("cantidad").value);
-      var grueso = parseFloat(document.getElementById("grueso").value);
-      var ancho = parseFloat(document.getElementById("ancho").value);
-      var largo = parseFloat(document.getElementById("largo").value);
-      var precioPie = parseFloat(document.getElementById("precio-pie").value);
+        // Función para agregar una nueva fila de cálculo
+        function addRow() {
+            const container = document.getElementById('calculation-rows-container');
+            const newRow = document.createElement('div');
+            newRow.classList.add('calculation-row');
+            newRow.id = `row-${rowCount}`; // Asigna un ID único a cada fila
 
-      var precioTotal = CalcularPrecio(cantidad, grueso, ancho, largo, precioPie);
-      document.getElementById("resultado").textContent = "El precio del trozo de madera es: Q" + precioTotal.toFixed(2);
-    }
-  </script>
+            newRow.innerHTML = `
+                <div class="form-group">
+                    <label for="cantidad-${rowCount}">Cantidad:</label>
+                    <input type="number" id="cantidad-${rowCount}" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="grueso-${rowCount}">Grueso (pulgadas):</label>
+                    <input type="number" id="grueso-${rowCount}" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="ancho-${rowCount}">Ancho (pulgadas):</label>
+                    <input type="number" id="ancho-${rowCount}" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="largo-${rowCount}">Largo (Pies):</label>
+                    <input type="number" id="largo-${rowCount}" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="precio-pie-${rowCount}">Precio/pie (Q):</label>
+                    <input type="number" id="precio-pie-${rowCount}" min="0" step="0.01" value="1">
+                </div>
+                <button class="delete-row-btn" onclick="deleteRow(${rowCount})">Eliminar</button>
+            `;
+            container.appendChild(newRow);
+            rowCount++; // Incrementa el contador para el próximo ID de fila
+        }
+
+        // Función para eliminar una fila de cálculo
+        function deleteRow(id) {
+            const rowToDelete = document.getElementById(`row-${id}`);
+            if (rowToDelete) {
+                rowToDelete.remove();
+                calculateAllPrices(); // Recalcular el total después de eliminar una fila
+            }
+        }
+
+        // Función principal para calcular todos los precios y la sumatoria
+        function calculateAllPrices() {
+            const resultsContainer = document.getElementById("results-container");
+            resultsContainer.innerHTML = ''; // Limpiar resultados anteriores
+            let grandTotal = 0;
+
+            for (let i = 0; i < rowCount; i++) {
+                // Verificar si la fila existe antes de intentar acceder a sus elementos
+                if (document.getElementById(`row-${i}`)) {
+                    const cantidad = parseFloat(document.getElementById(`cantidad-${i}`).value);
+                    const grueso = parseFloat(document.getElementById(`grueso-${i}`).value);
+                    const ancho = parseFloat(document.getElementById(`ancho-${i}`).value);
+                    const largo = parseFloat(document.getElementById(`largo-${i}`).value);
+                    const precioPie = parseFloat(document.getElementById(`precio-pie-${i}`).value);
+
+                    // Validar si los valores son números válidos
+                    if (isNaN(cantidad) || isNaN(grueso) || isNaN(ancho) || isNaN(largo) || isNaN(precioPie)) {
+                        resultsContainer.innerHTML += `<div class="individual-result">Error en la fila ${i + 1}: Asegúrate de introducir solo números válidos.</div>`;
+                        continue; // Saltar a la siguiente iteración si hay un error
+                    }
+
+                    const price = calculatePiecePrice(cantidad, grueso, ancho, largo, precioPie);
+                    grandTotal += price;
+
+                    resultsContainer.innerHTML += `<div class="individual-result">Línea ${i + 1}: Q${price.toFixed(2)}</div>`;
+                }
+            }
+            document.getElementById("total-sum").textContent = "Total General: Q" + grandTotal.toFixed(2);
+        }
+
+        // Ejecutar el cálculo inicial al cargar la página si ya hay una fila
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateAllPrices();
+        });
+
+    </script>
 </body>
 </html>
