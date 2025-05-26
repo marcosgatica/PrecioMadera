@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,8 +12,8 @@
             background-image: url(madera2.jpg);
             background-size: cover;
             background-repeat: no-repeat;
-            background-attachment: fixed; /* Esto asegura que la imagen de fondo no se desplace con el scroll */
-            color: #ffffff; /* Color de texto general para mejor contraste */
+            background-attachment: fixed;
+            color: #ffffff;
         }
         h1 {
             text-align: center;
@@ -21,7 +21,7 @@
             margin-bottom: 30px;
         }
         .container {
-            max-width: 900px; /* Aumentamos el ancho para acomodar los campos horizontales */
+            max-width: 900px;
             margin: 0 auto;
             background-color: #ee6047b6;
             padding: 20px;
@@ -29,18 +29,18 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .calculation-row {
-            display: flex; /* Usamos flexbox para organizar los elementos en horizontal */
-            flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea si no hay espacio */
-            gap: 15px; /* Espacio entre los elementos */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 20px;
             padding: 15px;
-            background-color: #c9513e9a; /* Fondo más claro para cada fila de cálculo */
+            background-color: #c9513e9a;
             border-radius: 5px;
-            align-items: flex-end; /* Alinea los elementos al final para que los inputs queden en la misma línea base */
+            align-items: flex-end;
         }
         .form-group {
-            flex: 1; /* Permite que los grupos de formulario crezcan y ocupen el espacio disponible */
-            min-width: 120px; /* Ancho mínimo para cada campo, ajusta si es necesario */
+            flex: 1;
+            min-width: 120px;
         }
         label {
             display: block;
@@ -48,13 +48,15 @@
             margin-bottom: 5px;
             color: #ffffff;
         }
-        input[type="number"] {
+        input[type="number"],
+        select { /* Estilo para el select */
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
-            color: #333; /* Color de texto para los inputs */
+            box-sizing: border-box;
+            color: #333;
+            background-color: #fff; /* Fondo blanco para el select */
         }
         button {
             display: block;
@@ -73,19 +75,19 @@
             background-color: #45a049;
         }
         #add-row-btn {
-            background-color: #007bff; /* Color para el botón de agregar fila */
+            background-color: #007bff;
             margin-bottom: 20px;
         }
         #add-row-btn:hover {
             background-color: #0056b3;
         }
         .delete-row-btn {
-            background-color: #dc3545; /* Color para el botón de eliminar fila */
-            width: auto; /* Para que el botón no ocupe todo el ancho */
+            background-color: #dc3545;
+            width: auto;
             padding: 8px 12px;
             font-size: 14px;
-            margin-top: 0; /* Reiniciar el margen superior para que se alinee */
-            align-self: center; /* Alinea el botón en el centro verticalmente dentro del flex container */
+            margin-top: 0;
+            align-self: center;
         }
         .delete-row-btn:hover {
             background-color: #c82333;
@@ -106,7 +108,7 @@
             font-weight: bold;
             margin-top: 20px;
             color: #ffffff;
-            background-color: #28a745; /* Fondo para el total */
+            background-color: #28a745;
             padding: 15px;
             border-radius: 5px;
         }
@@ -120,23 +122,32 @@
             <div class="calculation-row" id="row-0">
                 <div class="form-group">
                     <label for="cantidad-0">Cantidad:</label>
-                    <input type="number" id="cantidad-0" min="0" step="1" value="1">
+                    <input type="number" id="cantidad-0" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label for="grueso-0">Grueso (pulgadas):</label>
-                    <input type="number" id="grueso-0" min="0" step="1" value="1">
+                    <input type="number" id="grueso-0" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label for="ancho-0">Ancho (pulgadas):</label>
-                    <input type="number" id="ancho-0" min="0" step="1" value="1">
+                    <input type="number" id="ancho-0" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label for="largo-0">Largo (Pies):</label>
-                    <input type="number" id="largo-0" min="0" step="1" value="1">
+                    <input type="number" id="largo-0" min="0" step="1">
                 </div>
                 <div class="form-group">
-                    <label for="precio-pie-0">Precio/pie (Q):</label>
-                    <input type="number" id="precio-pie-0" min="0" step="0.01" value="1">
+                    <label for="tipo-madera-0">Tipo de Madera:</label>
+                    <select id="tipo-madera-0" onchange="updatePrecioPie(0)">
+                        <option value="">Seleccione...</option>
+                        <option value="9.5">Pino tabla (Q9.5)</option>
+                        <option value="8">Pino paral (Q8)</option>
+                        <option value="11.5">Ciprés tabla (Q11.5)</option>
+                        <option value="9">Ciprés paral (Q9)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display: none;"> <label for="precio-pie-0">Precio/pie (Q):</label>
+                    <input type="number" id="precio-pie-0" min="0" step="0.01" readonly>
                 </div>
                 <button class="delete-row-btn" onclick="deleteRow(0)">Eliminar</button>
             </div>
@@ -145,93 +156,113 @@
         <button id="add-row-btn" onclick="addRow()">Agregar nueva línea</button>
         <button onclick="calculateAllPrices()">Calcular Todo</button>
 
-        <div id="results-container">
-            </div>
-
+        <div id="results-container"></div>
         <div id="total-sum"></div>
     </div>
 
     <script>
-        let rowCount = 1; // Contador para el número de filas de cálculo
+        let rowCount = 1;
 
-        // Función para calcular el precio de una sola pieza de madera
+        // Mapeo de valores de precio por pie
+        const preciosMadera = {
+            "9.5": "Pino tabla",
+            "8": "Pino paral",
+            "11.5": "Ciprés tabla",
+            "9": "Ciprés paral"
+        };
+
+        // Función para actualizar el valor del input de precio por pie basado en la selección
+        function updatePrecioPie(id) {
+            const selectElement = document.getElementById(`tipo-madera-${id}`);
+            const precioPieInput = document.getElementById(`precio-pie-${id}`);
+            precioPieInput.value = selectElement.value; // El valor del select es el precio
+            calculateAllPrices(); // Recalcular automáticamente al cambiar la selección
+        }
+
         function calculatePiecePrice(cantidad, grueso, ancho, largo, precioPie) {
             if (grueso === 0 || ancho === 0 || largo === 0 || precioPie === 0 || cantidad === 0) {
-                return 0; // Evita divisiones por cero o cálculos sin sentido
+                return 0;
             }
-            // La fórmula original: (((G * A * L) / 12) * PrecioPie) * Cant;
             var precio = (((grueso * ancho * largo) / 12) * precioPie) * cantidad;
             return precio;
         }
 
-        // Función para agregar una nueva fila de cálculo
         function addRow() {
             const container = document.getElementById('calculation-rows-container');
             const newRow = document.createElement('div');
             newRow.classList.add('calculation-row');
-            newRow.id = `row-${rowCount}`; // Asigna un ID único a cada fila
+            newRow.id = `row-${rowCount}`;
 
             newRow.innerHTML = `
                 <div class="form-group">
                     <label for="cantidad-${rowCount}">Cantidad:</label>
-                    <input type="number" id="cantidad-${rowCount}" min="0" step="1" value="1">
+                    <input type="number" id="cantidad-${rowCount}" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label for="grueso-${rowCount}">Grueso (pulgadas):</label>
-                    <input type="number" id="grueso-${rowCount}" min="0" step="1" value="1">
+                    <input type="number" id="grueso-${rowCount}" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label for="ancho-${rowCount}">Ancho (pulgadas):</label>
-                    <input type="number" id="ancho-${rowCount}" min="0" step="1" value="1">
+                    <input type="number" id="ancho-${rowCount}" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label for="largo-${rowCount}">Largo (Pies):</label>
-                    <input type="number" id="largo-${rowCount}" min="0" step="1" value="1">
+                    <input type="number" id="largo-${rowCount}" min="0" step="1">
                 </div>
                 <div class="form-group">
+                    <label for="tipo-madera-${rowCount}">Tipo de Madera:</label>
+                    <select id="tipo-madera-${rowCount}" onchange="updatePrecioPie(${rowCount})">
+                        <option value="">Seleccione...</option>
+                        <option value="9.5">Pino tabla (Q9.5)</option>
+                        <option value="8">Pino paral (Q8)</option>
+                        <option value="11.5">Ciprés tabla (Q11.5)</option>
+                        <option value="9">Ciprés paral (Q9)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display: none;">
                     <label for="precio-pie-${rowCount}">Precio/pie (Q):</label>
-                    <input type="number" id="precio-pie-${rowCount}" min="0" step="0.01" value="1">
+                    <input type="number" id="precio-pie-${rowCount}" min="0" step="0.01" readonly>
                 </div>
                 <button class="delete-row-btn" onclick="deleteRow(${rowCount})">Eliminar</button>
             `;
             container.appendChild(newRow);
-            rowCount++; // Incrementa el contador para el próximo ID de fila
+            rowCount++;
         }
 
-        // Función para eliminar una fila de cálculo
         function deleteRow(id) {
             const rowToDelete = document.getElementById(`row-${id}`);
             if (rowToDelete) {
                 rowToDelete.remove();
-                calculateAllPrices(); // Recalcular el total después de eliminar una fila
+                calculateAllPrices();
             }
         }
 
-        // Función principal para calcular todos los precios y la sumatoria
         function calculateAllPrices() {
             const resultsContainer = document.getElementById("results-container");
-            resultsContainer.innerHTML = ''; // Limpiar resultados anteriores
+            resultsContainer.innerHTML = '';
             let grandTotal = 0;
 
             for (let i = 0; i < rowCount; i++) {
-                // Verificar si la fila existe antes de intentar acceder a sus elementos
                 if (document.getElementById(`row-${i}`)) {
-                    const cantidad = parseFloat(document.getElementById(`cantidad-${i}`).value);
-                    const grueso = parseFloat(document.getElementById(`grueso-${i}`).value);
-                    const ancho = parseFloat(document.getElementById(`ancho-${i}`).value);
-                    const largo = parseFloat(document.getElementById(`largo-${i}`).value);
-                    const precioPie = parseFloat(document.getElementById(`precio-pie-${i}`).value);
+                    const cantidad = parseFloat(document.getElementById(`cantidad-${i}`).value) || 0;
+                    const grueso = parseFloat(document.getElementById(`grueso-${i}`).value) || 0;
+                    const ancho = parseFloat(document.getElementById(`ancho-${i}`).value) || 0;
+                    const largo = parseFloat(document.getElementById(`largo-${i}`).value) || 0;
+                    const precioPie = parseFloat(document.getElementById(`precio-pie-${i}`).value) || 0; // Obtener del input oculto
 
-                    // Validar si los valores son números válidos
                     if (isNaN(cantidad) || isNaN(grueso) || isNaN(ancho) || isNaN(largo) || isNaN(precioPie)) {
-                        resultsContainer.innerHTML += `<div class="individual-result">Error en la fila ${i + 1}: Asegúrate de introducir solo números válidos.</div>`;
-                        continue; // Saltar a la siguiente iteración si hay un error
+                        resultsContainer.innerHTML += `<div class="individual-result">Error en la fila ${i + 1}: Asegúrate de introducir solo números válidos y seleccionar un tipo de madera.</div>`;
+                        continue;
                     }
 
                     const price = calculatePiecePrice(cantidad, grueso, ancho, largo, precioPie);
                     grandTotal += price;
 
-                    resultsContainer.innerHTML += `<div class="individual-result">Línea ${i + 1}: Q${price.toFixed(2)}</div>`;
+                    const tipoMaderaSeleccionado = document.getElementById(`tipo-madera-${i}`).value;
+                    const nombreMadera = preciosMadera[tipoMaderaSeleccionado] || "N/A"; // Obtener el nombre del tipo de madera
+
+                    resultsContainer.innerHTML += `<div class="individual-result">Línea ${i + 1} (${nombreMadera}): Q${price.toFixed(2)}</div>`;
                 }
             }
             document.getElementById("total-sum").textContent = "Total General: Q" + grandTotal.toFixed(2);
@@ -239,9 +270,11 @@
 
         // Ejecutar el cálculo inicial al cargar la página si ya hay una fila
         document.addEventListener('DOMContentLoaded', () => {
-            calculateAllPrices();
+            // No llamar a calculateAllPrices() aquí, ya que los campos están vacíos
+            // y la idea es que el usuario los llene y luego calcule.
+            // Si deseas que se muestre el "Total General: Q0.00" al inicio, puedes descomentar la siguiente línea:
+            // calculateAllPrices();
         });
-
     </script>
 </body>
 </html>
