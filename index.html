@@ -3,280 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Precio de Madera</title>
+    <title>Catálogo de Trozos de Madera</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-image: url(madera1.jpeg);
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            color: #ffffff;
-        }
-        h1 {
-            text-align: center;
-            color: #ffffff;
-            margin-bottom: 30px;
+            margin: 20px;
+            background-color: #f4f4f4;
         }
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: #ee6047b6;
-            padding: 20px;
+            background-color: #fff;
+            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: auto;
         }
-        .calculation-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #c9513e9a;
-            border-radius: 5px;
-            align-items: flex-end;
-        }
-        .form-group {
-            flex: 1;
-            min-width: 120px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #ffffff;
-        }
-        input[type="number"],
-        select { /* Estilo para el select */
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+        h1, h2 {
             color: #333;
-            background-color: #fff; /* Fondo blanco para el select */
+            text-align: center;
         }
-        button {
-            display: block;
-            width: 100%;
-            padding: 12px;
+        .search-section {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .search-section input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-section button {
+            padding: 10px 15px;
             background-color: #4CAF50;
-            color: #fff;
+            color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
         }
-        button:hover {
+        .search-section button:hover {
             background-color: #45a049;
         }
-        #add-row-btn {
-            background-color: #007bff;
+        #results-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
         }
-        #add-row-btn:hover {
-            background-color: #0056b3;
+        #results-table th, #results-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
-        .delete-row-btn {
-            background-color: #dc3545;
-            width: auto;
-            padding: 8px 12px;
-            font-size: 14px;
-            margin-top: 0;
-            align-self: center;
+        #results-table th {
+            background-color: #f2f2f2;
         }
-        .delete-row-btn:hover {
-            background-color: #c82333;
-        }
-        #results-container {
+        .cart-section {
             margin-top: 30px;
+            border-top: 1px solid #eee;
             padding-top: 20px;
-            border-top: 2px solid #ccc;
         }
-        .individual-result {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #ffffff;
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
         }
-        #total-sum {
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             text-align: center;
-            font-size: 24px;
-            font-weight: bold;
+        }
+        .total-section {
+            text-align: right;
             margin-top: 20px;
-            color: #ffffff;
-            background-color: #28a745;
-            padding: 15px;
-            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .add-to-cart-btn {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #007bb5;
+        }
+        .remove-from-cart-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .remove-from-cart-btn:hover {
+            background-color: #da190b;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de Precio de Madera</h1>
+        <h1>Catálogo de Trozos de Madera</h1>
 
-        <div id="calculation-rows-container">
-            <div class="calculation-row" id="row-0">
-                <div class="form-group">
-                    <label for="cantidad-0">Cantidad:</label>
-                    <input type="number" id="cantidad-0" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="grueso-0">Grueso (pulgadas):</label>
-                    <input type="number" id="grueso-0" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="ancho-0">Ancho (pulgadas):</label>
-                    <input type="number" id="ancho-0" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="largo-0">Largo (Pies):</label>
-                    <input type="number" id="largo-0" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="tipo-madera-0">Tipo de Madera:</label>
-                    <select id="tipo-madera-0" onchange="updatePrecioPie(0)">
-                        <option value="">Seleccione...</option>
-                        <option value="9.5">Pino tabla (Q9.5)</option>
-                        <option value="8">Pino paral (Q8)</option>
-						<option value="11">Pino/Cipres (Q11)</option>
-                        <option value="11.5">Ciprés tabla (Q11.5)</option>
-                        <option value="9">Ciprés paral (Q9)</option>
-                    </select>
-                </div>
-                <div class="form-group" style="display: none;"> <label for="precio-pie-0">Precio/pie (Q):</label>
-                    <input type="number" id="precio-pie-0" min="0" step="0.01" readonly>
-                </div>
-                <button class="delete-row-btn" onclick="deleteRow(0)">Eliminar</button>
-            </div>
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o precio (ej. '1x2x10' o '13.50')">
+            <button onclick="searchWood()">Buscar</button>
+            <button onclick="displayAllWood()">Mostrar Todo</button>
         </div>
 
-        <button id="add-row-btn" onclick="addRow()">Agregar nueva línea</button>
-        <button onclick="calculateAllPrices()">Calcular Todo</button>
+        <table id="results-table">
+            <thead>
+                <tr>
+                    <th>Nombre/Dimensiones</th>
+                    <th>Precio (GTQ)</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="woodList">
+                </tbody>
+        </table>
 
-        <div id="results-container"></div>
-        <div id="total-sum"></div>
+        <div class="cart-section">
+            <h2>Cálculo de Pedido</h2>
+            <div id="cartItems">
+                <p>No hay elementos en el carrito.</p>
+            </div>
+            <div class="total-section">
+                Total a Pagar: <span id="totalPrice">0.00</span> GTQ
+            </div>
+        </div>
     </div>
 
     <script>
-        let rowCount = 1;
+        // Paso 1: Datos del catálogo de madera
+        // ¡Importante! Reemplaza estos datos con los valores exactos de tu tabla.
+        const catalogoMadera = [
+            { id: "1x1x10", precio: 8.00 },
+            { id: "1x1x12", precio: 9.60 },
+            { id: "1x2x10", precio: 13.50 },
+            { id: "1x2x12", precio: 16.00 },
+            { id: "1x3x10", precio: 20.00 },
+            { id: "1x3x12", precio: 24.00 },
+            { id: "1x4x9", precio: 24.00 },
+            { id: "1x4x10", precio: 27.00 },
+            { id: "1x4x12", precio: 32.00 },
+            { id: "2x2x7", precio: 19.00 },
+            { id: "2x2x8", precio: 21.50 },
+            { id: "2x2x9", precio: 24.00 },
+            { id: "2x2x10", precio: 27.00 },
+            { id: "2x2x12", precio: 32.00 },
+            { id: "2x3x7", precio: 28.00 },
+            { id: "2x3x8", precio: 32.00 },
+            { id: "2x3x9", precio: 36.00 },
+            { id: "2x3x10", precio: 40.00 },
+            { id: "2x3x12", precio: 48.00 },
+            { id: "2x3x14", precio: 66.50 },
+            { id: "2x4x8", precio: 43.00 },
+            { id: "2x4x9", precio: 48.00 },
+            { id: "2x4x10", precio: 53.50 },
+            { id: "2x4x12", precio: 64.00 },
+            { id: "2x4x14", precio: 89.00 },
+            { id: "3x3x8", precio: 48.00 },
+            { id: "3x3x9", precio: 54.00 },
+            { id: "3x3x10", precio: 60.00 },
+            { id: "3x3x12", precio: 72.00 },
+            { id: "3x3x14", precio: 99.75 },
+            { id: "3x4x8", precio: 64.00 },
+            { id: "3x4x9", precio: 72.00 },
+            { id: "3x4x10", precio: 80.00 },
+            { id: "3x4x12", precio: 96.00 },
+            { id: "3x4x14", precio: 133.00 },
+            { id: "4x4x10", precio: 107.00 },
+            { id: "4x4x12", precio: 128.00 },
+            { id: "1x6x7", precio: 28.00 },
+            { id: "1x6x8", precio: 32.00 },
+            { id: "1x6x9", precio: 36.00 },
+            { id: "1x6x10", precio: 40.00 },
+            { id: "1x6x12", precio: 48.00 },
+            { id: "1x8x8", precio: 48.00 },
+            { id: "1x8x9", precio: 54.00 },
+            { id: "1x8x10", precio: 60.00 },
+            { id: "1x8x12", precio: 72.00 },
+            { id: "1x10x8", precio: 63.50 },
+            { id: "1x10x9", precio: 71.50 },
+            { id: "1x10x10", precio: 79.50 },
+            { id: "1x10x12", precio: 95.00 },
+            { id: "1x12x7", precio: 66.50 },
+            { id: "1x12x8", precio: 76.00 },
+            { id: "1x12x9", precio: 85.50 },
+            { id: "1x12x10", precio: 95.00 },
+            { id: "1x12x12", precio: 114.00 },
+            { id: "1.5x12x8", precio: 114.00 },
+            { id: "1.5x12x9", precio: 128.50 },
+            { id: "1.5x12x10", precio: 142.50 },
+            { id: "1.5x12x12", precio: 171.00 },
+            { id: "2x12x8", precio: 152.00 },
+            { id: "2x12x10", precio: 190.00 },
+            { id: "2x12x12", precio: 228.00 },
+            { id: "Duda forma 10", precio: 45.00 },
+            { id: "Duela forma 12", precio: 54.00 },
+            { id: "Lepa Doc", precio: 140.00 }
+        ];
 
-        // Mapeo de valores de precio por pie
-        const preciosMadera = {
-            "9.5": "Pino tabla",
-            "8": "Pino paral",
-			"11": "Pino/Cipres",
-            "11.5": "Ciprés tabla",
-            "9": "Ciprés paral"
-        };
+        let cart = []; // Almacena los elementos seleccionados para el cálculo
 
-        // Función para actualizar el valor del input de precio por pie basado en la selección
-        function updatePrecioPie(id) {
-            const selectElement = document.getElementById(`tipo-madera-${id}`);
-            const precioPieInput = document.getElementById(`precio-pie-${id}`);
-            precioPieInput.value = selectElement.value; // El valor del select es el precio
-            calculateAllPrices(); // Recalcular automáticamente al cambiar la selección
-        }
+        // Función para mostrar los trozos de madera en la tabla
+        function displayWood(woods) {
+            const woodList = document.getElementById('woodList');
+            woodList.innerHTML = ''; // Limpiar resultados anteriores
 
-        function calculatePiecePrice(cantidad, grueso, ancho, largo, precioPie) {
-            if (grueso === 0 || ancho === 0 || largo === 0 || precioPie === 0 || cantidad === 0) {
-                return 0;
+            if (woods.length === 0) {
+                woodList.innerHTML = '<tr><td colspan="3">No se encontraron resultados.</td></tr>';
+                return;
             }
-            var precio = (((grueso * ancho * largo) / 12) * precioPie) * cantidad;
-            return precio;
+
+            woods.forEach(wood => {
+                const row = woodList.insertRow();
+                row.insertCell(0).textContent = wood.id;
+                row.insertCell(1).textContent = wood.precio.toFixed(2) + ' GTQ';
+                const actionCell = row.insertCell(2);
+                const addButton = document.createElement('button');
+                addButton.textContent = 'Agregar al carrito';
+                addButton.className = 'add-to-cart-btn';
+                addButton.onclick = () => addToCart(wood);
+                actionCell.appendChild(addButton);
+            });
         }
 
-        function addRow() {
-            const container = document.getElementById('calculation-rows-container');
-            const newRow = document.createElement('div');
-            newRow.classList.add('calculation-row');
-            newRow.id = `row-${rowCount}`;
-
-            newRow.innerHTML = `
-                <div class="form-group">
-                    <label for="cantidad-${rowCount}">Cantidad:</label>
-                    <input type="number" id="cantidad-${rowCount}" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="grueso-${rowCount}">Grueso (pulgadas):</label>
-                    <input type="number" id="grueso-${rowCount}" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="ancho-${rowCount}">Ancho (pulgadas):</label>
-                    <input type="number" id="ancho-${rowCount}" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="largo-${rowCount}">Largo (Pies):</label>
-                    <input type="number" id="largo-${rowCount}" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="tipo-madera-${rowCount}">Tipo de Madera:</label>
-                    <select id="tipo-madera-${rowCount}" onchange="updatePrecioPie(${rowCount})">
-                        <option value="">Seleccione...</option>
-                        <option value="9.5">Pino tabla (Q9.5)</option>
-                        <option value="8">Pino paral (Q8)</option>
-                        <option value="11.5">Ciprés tabla (Q11.5)</option>
-                        <option value="9">Ciprés paral (Q9)</option>
-                    </select>
-                </div>
-                <div class="form-group" style="display: none;">
-                    <label for="precio-pie-${rowCount}">Precio/pie (Q):</label>
-                    <input type="number" id="precio-pie-${rowCount}" min="0" step="0.01" readonly>
-                </div>
-                <button class="delete-row-btn" onclick="deleteRow(${rowCount})">Eliminar</button>
-            `;
-            container.appendChild(newRow);
-            rowCount++;
+        // Función para buscar trozos de madera
+        function searchWood() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredWoods = catalogoMadera.filter(wood =>
+                wood.id.toLowerCase().includes(searchTerm) ||
+                wood.precio.toString().includes(searchTerm)
+            );
+            displayWood(filteredWoods);
         }
 
-        function deleteRow(id) {
-            const rowToDelete = document.getElementById(`row-${id}`);
-            if (rowToDelete) {
-                rowToDelete.remove();
-                calculateAllPrices();
+        // Función para mostrar todos los trozos de madera
+        function displayAllWood() {
+            document.getElementById('searchInput').value = ''; // Limpiar la barra de búsqueda
+            displayWood(catalogoMadera);
+        }
+
+        // Función para agregar un trozo de madera al carrito
+        function addToCart(wood) {
+            const existingItem = cart.find(item => item.id === wood.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...wood, quantity: 1 });
             }
+            renderCart();
         }
 
-        function calculateAllPrices() {
-            const resultsContainer = document.getElementById("results-container");
-            resultsContainer.innerHTML = '';
-            let grandTotal = 0;
+        // Función para remover un trozo de madera del carrito
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+        }
 
-            for (let i = 0; i < rowCount; i++) {
-                if (document.getElementById(`row-${i}`)) {
-                    const cantidad = parseFloat(document.getElementById(`cantidad-${i}`).value) || 0;
-                    const grueso = parseFloat(document.getElementById(`grueso-${i}`).value) || 0;
-                    const ancho = parseFloat(document.getElementById(`ancho-${i}`).value) || 0;
-                    const largo = parseFloat(document.getElementById(`largo-${i}`).value) || 0;
-                    const precioPie = parseFloat(document.getElementById(`precio-pie-${i}`).value) || 0; // Obtener del input oculto
-
-                    if (isNaN(cantidad) || isNaN(grueso) || isNaN(ancho) || isNaN(largo) || isNaN(precioPie)) {
-                        resultsContainer.innerHTML += `<div class="individual-result">Error en la fila ${i + 1}: Asegúrate de introducir solo números válidos y seleccionar un tipo de madera.</div>`;
-                        continue;
-                    }
-
-                    const price = calculatePiecePrice(cantidad, grueso, ancho, largo, precioPie);
-                    grandTotal += price;
-
-                    const tipoMaderaSeleccionado = document.getElementById(`tipo-madera-${i}`).value;
-                    const nombreMadera = preciosMadera[tipoMaderaSeleccionado] || "N/A"; // Obtener el nombre del tipo de madera
-
-                    resultsContainer.innerHTML += `<div class="individual-result">Línea ${i + 1} (${nombreMadera}): Q${price.toFixed(2)}</div>`;
-                }
+        // Función para actualizar la cantidad de un elemento en el carrito
+        function updateQuantity(id, newQuantity) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity = parseInt(newQuantity) > 0 ? parseInt(newQuantity) : 1;
             }
-            document.getElementById("total-sum").textContent = "Total General: Q" + grandTotal.toFixed(2);
+            renderCart();
         }
 
-        // Ejecutar el cálculo inicial al cargar la página si ya hay una fila
-        document.addEventListener('DOMContentLoaded', () => {
-            // No llamar a calculateAllPrices() aquí, ya que los campos están vacíos
-            // y la idea es que el usuario los llene y luego calcule.
-            // Si deseas que se muestre el "Total General: Q0.00" al inicio, puedes descomentar la siguiente línea:
-            // calculateAllPrices();
-        });
+        // Función para renderizar el carrito y calcular el total
+        function renderCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const totalPriceSpan = document.getElementById('totalPrice');
+            cartItemsDiv.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p>No hay elementos en el carrito.</p>';
+                totalPriceSpan.textContent = '0.00';
+                return;
+            }
+
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <span>${item.id} (Precio unitario: ${item.precio.toFixed(2)} GTQ)</span>
+                    <div>
+                        Cantidad: <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity('${item.id}', this.value)">
+                        Subtotal: ${(item.precio * item.quantity).toFixed(2)} GTQ
+                        <button class="remove-from-cart-btn" onclick="removeFromCart('${item.id}')">Quitar</button>
+                    </div>
+                `;
+                cartItemsDiv.appendChild(itemDiv);
+                total += item.precio * item.quantity;
+            });
+
+            totalPriceSpan.textContent = total.toFixed(2);
+        }
+
+        // Cargar todos los trozos de madera al inicio
+        document.addEventListener('DOMContentLoaded', displayAllWood);
     </script>
 </body>
 </html>
